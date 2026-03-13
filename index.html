@@ -7,1708 +7,1334 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="KIM Church" />
-  <meta name="description" content="Kingdom Insights Ministries - Official Church App" />
   <title>Kingdom Insights Ministries</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/png" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/icon-180.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --gold: #F5C842;
-      --gold-light: #FFE083;
-      --gold-dark: #C9960A;
       --navy: #0D1B5E;
       --navy-light: #1a2d8a;
+      --gold: #F5C842;
+      --gold-dim: #c9a227;
       --black: #0a0a0f;
-      --dark: #111118;
-      --dark2: #1a1a24;
+      --black-2: #111118;
+      --black-3: #18181f;
+      --black-4: #1e1e28;
       --white: #ffffff;
-      --gray: #8888aa;
-      --light-gray: #e8e8f0;
+      --gray: rgba(255,255,255,0.5);
+      --gray-dim: rgba(255,255,255,0.2);
+      --border: rgba(255,255,255,0.08);
+      --border-gold: rgba(245,200,66,0.25);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Inter', sans-serif;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     html, body {
       height: 100%;
+      overflow: hidden;
       background: var(--black);
       color: var(--white);
-      font-family: 'Montserrat', sans-serif;
-      overflow: hidden;
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
     }
 
-    #app {
-      height: 100vh;
-      height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* ── SPLASH SCREEN ── */
+    /* ── SPLASH ── */
     #splash {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0; z-index: 100;
       background: var(--black);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      transition: opacity 0.8s ease, transform 0.8s ease;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1.5rem;
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
-
-    #splash.hide {
-      opacity: 0;
-      transform: scale(1.05);
-      pointer-events: none;
-    }
-
-    .splash-logo {
-      width: 180px;
-      animation: splashPulse 2s ease-in-out infinite;
-    }
-
+    #splash.hidden { opacity: 0; transform: scale(1.05); pointer-events: none; }
+    .splash-logo { width: 180px; animation: splashPop 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards; }
     .splash-tagline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      color: var(--gold);
-      letter-spacing: 0.3em;
-      margin-top: 1.5rem;
-      text-transform: uppercase;
-      animation: fadeUp 1s ease 0.5s both;
+      font-family: var(--font-display);
+      font-size: 1.1rem; color: var(--gold);
+      letter-spacing: 0.15em; font-style: italic;
+      opacity: 0; animation: fadeUp 0.6s ease 0.6s forwards;
+    }
+    .splash-bar {
+      width: 60px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0; animation: fadeUp 0.4s ease 1s forwards;
+    }
+    @keyframes splashPop { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── APP SHELL ── */
+    #app {
+      display: flex; flex-direction: column;
+      height: 100dvh; overflow: hidden;
     }
 
-    @keyframes splashPulse {
-      0%, 100% { filter: drop-shadow(0 0 20px rgba(245,200,66,0.3)); }
-      50% { filter: drop-shadow(0 0 50px rgba(245,200,66,0.7)); }
+    /* ── TOP BAR ── */
+    .topbar {
+      flex-shrink: 0;
+      padding: calc(var(--safe-top) + 0.75rem) 1.25rem 0.75rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--black);
+      border-bottom: 1px solid var(--border);
+      position: relative; z-index: 10;
     }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .topbar::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
     }
-
-    /* ── HEADER ── */
-    .header {
-      background: linear-gradient(180deg, rgba(10,10,15,0.98) 0%, rgba(10,10,15,0.95) 100%);
-      backdrop-filter: blur(20px);
-      padding: 1rem 1.5rem 0.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(245,200,66,0.15);
-      position: relative;
-      z-index: 10;
-      padding-top: max(1rem, env(safe-area-inset-top));
+    .topbar-logo { height: 36px; width: auto; }
+    .topbar-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem; font-weight: 600;
+      color: var(--white); letter-spacing: 0.02em;
     }
-
-    .header-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+    .topbar-give {
+      padding: 0.4rem 1rem;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 0.72rem; font-weight: 700;
+      border-radius: 20px; text-decoration: none;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      transition: opacity 0.2s;
     }
+    .topbar-give:active { opacity: 0.8; }
 
-    .header-logo img {
-      height: 40px;
-      width: auto;
-    }
-
-    .header-title {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header-title span:first-child {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.05em;
-      line-height: 1;
-    }
-
-    .header-title span:last-child {
-      font-size: 0.6rem;
-      color: var(--gold);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .live-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(220,38,38,0.15);
-      border: 1px solid rgba(220,38,38,0.4);
-      border-radius: 20px;
-      padding: 0.3rem 0.75rem;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: #ff4444;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .live-badge:hover { background: rgba(220,38,38,0.25); }
-
-    .live-dot {
-      width: 6px;
-      height: 6px;
-      background: #ff4444;
-      border-radius: 50%;
-      animation: livePulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes livePulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
-    }
-
-    /* ── MAIN CONTENT ── */
-    .main {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
+    /* ── SCROLL AREA ── */
+    .scroll-area {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
       scroll-behavior: smooth;
     }
+    .scroll-area::-webkit-scrollbar { display: none; }
 
-    .page { display: none; animation: pageIn 0.4s ease; }
+    /* ── PAGES ── */
+    .page { display: none; min-height: 100%; padding-bottom: calc(var(--safe-bottom) + 5rem); }
     .page.active { display: block; }
-
-    @keyframes pageIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── HOME PAGE ── */
-    .hero {
-      position: relative;
-      height: 240px;
-      background: linear-gradient(135deg, var(--navy) 0%, #050d35 50%, var(--black) 100%);
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 30% 50%, rgba(245,200,66,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(13,27,94,0.6) 0%, transparent 60%);
-    }
-
-    .hero-lines {
-      position: absolute;
-      inset: 0;
-      background-image: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 80px,
-        rgba(245,200,66,0.03) 80px,
-        rgba(245,200,66,0.03) 81px
-      );
-    }
-
-    .hero-content {
-      position: relative;
-      text-align: center;
-      padding: 1.5rem;
-    }
-
-    .hero-eyebrow {
-      font-size: 0.6rem;
-      letter-spacing: 0.35em;
-      color: var(--gold);
-      text-transform: uppercase;
-      margin-bottom: 0.75rem;
-    }
-
-    .hero-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2.2rem;
-      font-weight: 600;
-      line-height: 1.1;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-    }
-
-    .hero-title span { color: var(--gold); }
-
-    .hero-sub {
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.5);
-      letter-spacing: 0.1em;
-    }
-
-    /* Quick Actions */
-    .quick-actions {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.75rem;
-      padding: 1.25rem 1rem;
-      background: var(--dark);
-    }
-
-    .quick-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-
-    .quick-btn:active { transform: scale(0.92); }
-
-    .quick-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      background: linear-gradient(135deg, rgba(245,200,66,0.12), rgba(245,200,66,0.05));
-      border: 1px solid rgba(245,200,66,0.2);
-    }
-
-    .quick-btn span {
-      font-size: 0.6rem;
-      color: var(--gray);
-      text-align: center;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    /* Section */
-    .section { padding: 1.25rem 1rem; }
-    .section + .section { padding-top: 0; }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-
-    .section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    .section-link {
-      font-size: 0.65rem;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    /* Announcement Card */
-    .announcement-card {
-      background: var(--dark2);
-      border-radius: 16px;
-      padding: 1.2rem;
-      border: 1px solid rgba(245,200,66,0.1);
-      margin-bottom: 0.75rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .announcement-card::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: var(--gold);
-      border-radius: 3px 0 0 3px;
-    }
-
-    .announcement-date {
-      font-size: 0.6rem;
-      color: var(--gold);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 0.4rem;
-    }
-
-    .announcement-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 0.3rem;
-    }
-
-    .announcement-text {
-      font-size: 0.75rem;
-      color: var(--gray);
-      line-height: 1.6;
-    }
-
-    /* Sermon Card */
-    .sermon-card {
-      background: var(--dark2);
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 0.75rem;
-      border: 1px solid rgba(255,255,255,0.06);
-      cursor: pointer;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .sermon-card:active { transform: scale(0.98); border-color: rgba(245,200,66,0.3); }
-
-    .sermon-thumb {
-      width: 100%;
-      height: 160px;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--black) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .sermon-thumb-bg {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, rgba(245,200,66,0.1) 0%, transparent 70%);
-    }
-
-    .play-btn {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: rgba(245,200,66,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      position: relative;
-      z-index: 1;
-      box-shadow: 0 0 30px rgba(245,200,66,0.4);
-    }
-
-    .sermon-info { padding: 1rem; }
-
-    .sermon-series {
-      font-size: 0.6rem;
-      color: var(--gold);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 0.3rem;
-    }
-
-    .sermon-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 0.3rem;
-    }
-
-    .sermon-meta {
-      font-size: 0.65rem;
-      color: var(--gray);
-      display: flex;
-      gap: 1rem;
-    }
-
-    /* ── LIVE PAGE ── */
-    .live-page { padding: 1.25rem 1rem; }
-
-    .live-header {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .live-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.8rem;
-      color: var(--white);
-      margin-bottom: 0.3rem;
-    }
-
-    .live-sub {
-      font-size: 0.7rem;
-      color: var(--gray);
-      letter-spacing: 0.1em;
-    }
-
-    .youtube-embed {
-      width: 100%;
-      border-radius: 16px;
-      overflow: hidden;
-      background: var(--dark2);
-      border: 1px solid rgba(245,200,66,0.1);
-      margin-bottom: 1rem;
-    }
-
-    .youtube-embed iframe {
-      width: 100%;
-      height: 210px;
-      display: block;
-      border: none;
-    }
-
-    .youtube-link-btn {
-      width: 100%;
-      padding: 1rem;
-      background: linear-gradient(135deg, #ff0000, #cc0000);
-      border: none;
-      border-radius: 14px;
-      color: white;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: opacity 0.2s ease;
-      margin-bottom: 1rem;
-      text-decoration: none;
-    }
-
-    .schedule-card {
-      background: var(--dark2);
-      border-radius: 16px;
-      padding: 1.2rem;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .schedule-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      color: var(--white);
-      margin-bottom: 1rem;
-    }
-
-    .schedule-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .schedule-item:last-child { border-bottom: none; }
-
-    .schedule-day {
-      width: 80px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .schedule-info { flex: 1; }
-    .schedule-name { font-size: 0.85rem; color: var(--white); font-weight: 500; }
-    .schedule-time { font-size: 0.7rem; color: var(--gray); margin-top: 2px; }
-
-    /* ── GIVE PAGE ── */
-    .give-page { padding: 0; }
-
-    .give-hero {
-      background: linear-gradient(135deg, var(--navy) 0%, #050d35 100%);
-      padding: 2rem 1.5rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .give-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, rgba(245,200,66,0.1) 0%, transparent 70%);
-    }
-
-    .give-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .give-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-      position: relative;
-    }
-
-    .give-verse {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.6);
-      font-style: italic;
-      line-height: 1.6;
-      position: relative;
-    }
-
-    .give-options {
-      padding: 1.5rem 1rem;
-    }
-
-    .give-btn {
-      display: block;
-      width: 100%;
-      padding: 1.1rem;
-      border-radius: 14px;
-      border: none;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      margin-bottom: 0.75rem;
-      text-align: center;
-      text-decoration: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .give-btn:active { transform: scale(0.98); }
-
-    .give-btn-primary {
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-      color: var(--black);
-      box-shadow: 0 8px 30px rgba(245,200,66,0.3);
-    }
-
-    .give-btn-secondary {
-      background: var(--dark2);
-      color: var(--white);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .give-info {
-      background: var(--dark2);
-      margin: 0 1rem 1rem;
-      border-radius: 16px;
-      padding: 1.2rem;
-      border: 1px solid rgba(245,200,66,0.1);
-    }
-
-    .give-info-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      color: var(--gold);
-      margin-bottom: 0.75rem;
-    }
-
-    .give-info-text {
-      font-size: 0.75rem;
-      color: var(--gray);
-      line-height: 1.7;
-    }
-
-    /* ── EVENTS PAGE ── */
-    .events-page { padding: 1.25rem 1rem; }
-
-    .event-card {
-      background: var(--dark2);
-      border-radius: 16px;
-      padding: 1.2rem;
-      margin-bottom: 0.75rem;
-      border: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-      cursor: pointer;
-      transition: border-color 0.2s ease;
-    }
-
-    .event-card:active { border-color: rgba(245,200,66,0.3); }
-
-    .event-date-box {
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      border-radius: 12px;
-      padding: 0.6rem 0.8rem;
-      text-align: center;
-      min-width: 52px;
-      flex-shrink: 0;
-    }
-
-    .event-month {
-      font-size: 0.55rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--black);
-      text-transform: uppercase;
-    }
-
-    .event-day {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--black);
-      line-height: 1;
-    }
-
-    .event-details { flex: 1; }
-
-    .event-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 0.3rem;
-    }
-
-    .event-meta {
-      font-size: 0.65rem;
-      color: var(--gray);
-      line-height: 1.6;
-    }
-
-    .event-tag {
-      display: inline-block;
-      background: rgba(245,200,66,0.1);
-      border: 1px solid rgba(245,200,66,0.2);
-      color: var(--gold);
-      font-size: 0.55rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.5rem;
-      border-radius: 20px;
-      margin-top: 0.4rem;
-    }
-
-    /* ── ABOUT PAGE ── */
-    .about-page { padding: 0 0 2rem; }
-
-    .about-hero {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--black) 100%);
-      padding: 2rem 1.5rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .about-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 100%, rgba(245,200,66,0.08) 0%, transparent 70%);
-    }
-
-    .about-logo {
-      width: 100px;
-      margin: 0 auto 1rem;
-      display: block;
-      position: relative;
-    }
-
-    .about-church-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      color: var(--white);
-      margin-bottom: 0.3rem;
-      position: relative;
-    }
-
-    .about-tagline {
-      font-size: 0.7rem;
-      color: var(--gold);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      position: relative;
-    }
-
-    .staff-section { padding: 1.25rem 1rem; }
-
-    .staff-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
-      color: var(--white);
-      margin-bottom: 1rem;
-    }
-
-    .staff-card {
-      background: var(--dark2);
-      border-radius: 16px;
-      padding: 1.2rem;
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      margin-bottom: 0.75rem;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .staff-avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--navy), var(--navy-light));
-      border: 2px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      flex-shrink: 0;
-    }
-
-    .staff-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    .staff-role {
-      font-size: 0.65rem;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .staff-bio {
-      font-size: 0.72rem;
-      color: var(--gray);
-      line-height: 1.6;
-      margin-top: 0.3rem;
-    }
-
-    .about-info { padding: 0 1rem; }
-
-    .info-card {
-      background: var(--dark2);
-      border-radius: 16px;
-      padding: 1.2rem;
-      border: 1px solid rgba(255,255,255,0.06);
-      margin-bottom: 0.75rem;
-    }
-
-    .info-label {
-      font-size: 0.6rem;
-      color: var(--gold);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 0.4rem;
-    }
-
-    .info-value {
-      font-size: 0.9rem;
-      color: var(--white);
-      font-weight: 500;
-    }
 
     /* ── BOTTOM NAV ── */
     .bottom-nav {
-      background: rgba(10,10,15,0.97);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(245,200,66,0.1);
-      display: flex;
-      padding: 0.6rem 0;
-      padding-bottom: max(0.6rem, env(safe-area-inset-bottom));
-    }
-
-    .nav-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
-      padding: 0.4rem;
-      cursor: pointer;
-      transition: opacity 0.2s ease;
-      position: relative;
-    }
-
-    .nav-item:active { opacity: 0.7; }
-
-    .nav-icon {
-      font-size: 1.4rem;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .nav-label {
-      font-size: 0.55rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gray);
-      transition: color 0.2s ease;
-    }
-
-    .nav-item.active .nav-icon { transform: translateY(-2px) scale(1.1); }
-    .nav-item.active .nav-label { color: var(--gold); }
-
-    .nav-item.active::after {
-      content: '';
-      position: absolute;
-      bottom: -0.6rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 30px;
-      height: 2px;
-      background: var(--gold);
-      border-radius: 2px;
-    }
-
-    /* ── SERMONS PAGE ── */
-    .sermons-page { padding: 1.25rem 1rem; }
-
-    .filter-row {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.25rem;
-      overflow-x: auto;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    .filter-row::-webkit-scrollbar { display: none; }
-
-    .filter-chip {
       flex-shrink: 0;
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: transparent;
-      color: var(--gray);
-      cursor: pointer;
-      transition: all 0.2s ease;
+      padding-bottom: var(--safe-bottom);
+      background: var(--black-2);
+      border-top: 1px solid var(--border);
+      display: flex; position: relative;
     }
-
-    .filter-chip.active {
+    .bottom-nav::before {
+      content: '';
+      position: absolute; top: -1px; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+    }
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.3rem; padding: 0.65rem 0.25rem;
+      background: none; border: none; cursor: pointer;
+      color: var(--gray); transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-item.active { color: var(--gold); }
+    .nav-item svg { width: 22px; height: 22px; stroke-width: 1.6; }
+    .nav-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+    .nav-dot {
+      width: 4px; height: 4px; border-radius: 50%;
       background: var(--gold);
-      border-color: var(--gold);
-      color: var(--black);
+      position: absolute; bottom: calc(var(--safe-bottom) + 0.35rem);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .nav-item.active .nav-dot { opacity: 1; }
+
+    /* ── HERO BANNER ── */
+    .hero-banner {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--black) 60%);
+      padding: 2.5rem 1.5rem 2rem;
+      margin-bottom: 0;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(245,200,66,0.08) 0%, transparent 70%);
+    }
+    .hero-banner::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+    }
+    .hero-eyebrow {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 2.4rem; font-weight: 600; line-height: 1.1;
+      color: var(--white); margin-bottom: 0.75rem;
+    }
+    .hero-title em { color: var(--gold); font-style: italic; }
+    .hero-sub { font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.6; max-width: 280px; }
+    .hero-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .btn-primary {
+      padding: 0.65rem 1.4rem;
+      background: var(--gold); color: var(--black);
+      font-size: 0.75rem; font-weight: 700; border-radius: 24px;
+      text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;
+      transition: opacity 0.2s; border: none; cursor: pointer;
+    }
+    .btn-primary:active { opacity: 0.8; }
+    .btn-outline {
+      padding: 0.65rem 1.4rem;
+      background: transparent; color: var(--white);
+      font-size: 0.75rem; font-weight: 600; border-radius: 24px;
+      text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;
+      border: 1px solid var(--border); transition: border-color 0.2s;
+      cursor: pointer;
+    }
+    .btn-outline:active { border-color: var(--gold); }
+
+    /* ── SECTION ── */
+    .section { padding: 1.75rem 1.25rem 0; }
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .section-label {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ── QUICK ACTIONS ── */
+    .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; padding: 1.25rem; }
+    .quick-item {
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      background: var(--black-3); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1rem 0.5rem;
+      text-decoration: none; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .quick-item:active { background: var(--black-4); border-color: var(--border-gold); }
+    .quick-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .quick-icon.gold { background: rgba(245,200,66,0.12); }
+    .quick-icon.navy { background: rgba(13,27,94,0.4); }
+    .quick-icon.red { background: rgba(255,0,0,0.1); }
+    .quick-icon.green { background: rgba(52,199,89,0.1); }
+    .quick-label { font-size: 0.65rem; font-weight: 600; color: var(--white); text-align: center; letter-spacing: 0.02em; }
+
+    /* ── ANNOUNCEMENT CARD ── */
+    .announce-card {
+      margin: 0 1.25rem;
+      background: linear-gradient(135deg, var(--navy) 0%, #0f1840 100%);
+      border: 1px solid var(--border-gold);
+      border-radius: 20px; padding: 1.25rem 1.5rem;
+      position: relative; overflow: hidden;
+    }
+    .announce-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .announce-tag {
+      display: inline-block; font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.5rem;
+    }
+    .announce-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--white); margin-bottom: 0.4rem; }
+    .announce-text { font-size: 0.78rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+    /* ── SERMON CARD ── */
+    .sermon-card {
+      background: var(--black-3); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem; margin-bottom: 0.75rem;
+      cursor: pointer; text-decoration: none;
+      transition: border-color 0.2s; -webkit-tap-highlight-color: transparent;
+    }
+    .sermon-card:active { border-color: var(--border-gold); }
+    .sermon-thumb {
+      width: 60px; height: 60px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--navy), var(--black-4));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 1.5rem;
+    }
+    .sermon-info { flex: 1; min-width: 0; }
+    .sermon-series { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.25rem; }
+    .sermon-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--white); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sermon-meta { font-size: 0.7rem; color: var(--gray); margin-top: 0.2rem; }
+    .sermon-play {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--gold); color: var(--black);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
 
-    /* Divider */
-    .divider {
-      height: 8px;
-      background: var(--black);
+    /* ── LIVE PAGE ── */
+    .live-status {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 1.5rem 1.25rem 0.75rem;
     }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #ff3b30;
+      box-shadow: 0 0 0 0 rgba(255,59,48,0.4);
+      animation: livePulse 2s infinite;
+    }
+    @keyframes livePulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,59,48,0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(255,59,48,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,59,48,0); }
+    }
+    .live-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #ff3b30; }
+    .live-embed {
+      margin: 0 1.25rem;
+      border-radius: 20px; overflow: hidden;
+      background: var(--black-3); border: 1px solid var(--border);
+      aspect-ratio: 16/9;
+    }
+    .live-embed iframe { width: 100%; height: 100%; border: none; display: block; }
+    .live-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      margin: 1rem 1.25rem 0;
+      padding: 1rem; border-radius: 16px;
+      background: linear-gradient(135deg, #ff0000, #cc0000);
+      color: white; font-size: 0.8rem; font-weight: 700;
+      text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .schedule-block {
+      margin: 1.5rem 1.25rem 0;
+      background: var(--black-3); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+    }
+    .schedule-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .schedule-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .schedule-row:last-child { border-bottom: none; }
+    .schedule-day-pill {
+      min-width: 72px; padding: 0.3rem 0.75rem;
+      background: rgba(245,200,66,0.1); border: 1px solid var(--border-gold);
+      border-radius: 20px; text-align: center;
+      font-size: 0.65rem; font-weight: 700; color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+    .schedule-details { flex: 1; }
+    .schedule-name { font-size: 0.85rem; font-weight: 600; color: var(--white); }
+    .schedule-time { font-size: 0.72rem; color: var(--gray); margin-top: 0.15rem; }
 
-    /* Scrollbars */
-    .main::-webkit-scrollbar { display: none; }
-    .main { -ms-overflow-style: none; scrollbar-width: none; }
+    /* ── GIVE PAGE ── */
+    .give-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--black) 70%);
+      padding: 2rem 1.25rem 1.5rem;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid var(--border-gold);
+    }
+    .give-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(245,200,66,0.1) 0%, transparent 60%);
+    }
+    .give-title {
+      font-family: var(--font-display);
+      font-size: 2rem; font-weight: 600; color: var(--white);
+      position: relative; margin-bottom: 0.5rem;
+    }
+    .give-verse { font-size: 0.78rem; color: rgba(255,255,255,0.5); font-style: italic; position: relative; }
+    .give-options { padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .give-option {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--black-3); border: 1px solid var(--border);
+      border-radius: 20px; padding: 1.25rem;
+      text-decoration: none; cursor: pointer;
+      transition: border-color 0.2s; -webkit-tap-highlight-color: transparent;
+    }
+    .give-option:active { border-color: var(--border-gold); }
+    .give-option-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: rgba(245,200,66,0.1); border: 1px solid var(--border-gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
+    }
+    .give-option-info { flex: 1; }
+    .give-option-title { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 0.2rem; }
+    .give-option-desc { font-size: 0.72rem; color: var(--gray); }
+    .give-arrow { color: var(--gold); font-size: 1.1rem; }
+
+    /* ── EVENTS PAGE ── */
+    .events-list { padding: 0 1.25rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .event-card {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--black-3); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1rem 1.25rem;
+      position: relative; overflow: hidden;
+    }
+    .event-card.special { border-color: var(--border-gold); }
+    .event-card.special::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+    }
+    .event-date {
+      display: flex; flex-direction: column; align-items: center;
+      min-width: 44px; text-align: center;
+    }
+    .event-month { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }
+    .event-day { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--white); line-height: 1; }
+    .event-info { flex: 1; min-width: 0; }
+    .event-title { font-size: 0.85rem; font-weight: 600; color: var(--white); margin-bottom: 0.2rem; }
+    .event-time { font-size: 0.7rem; color: var(--gold); }
+    .event-location { font-size: 0.68rem; color: var(--gray); margin-top: 0.1rem; }
+    .event-badge {
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 0.25rem 0.6rem;
+      border-radius: 10px; flex-shrink: 0;
+      background: rgba(255,255,255,0.05); color: var(--gray);
+      border: 1px solid var(--border);
+    }
+    .event-badge.special { background: rgba(245,200,66,0.1); color: var(--gold); border-color: var(--border-gold); }
+
+    /* ── ABOUT PAGE ── */
+    .about-hero {
+      background: linear-gradient(160deg, var(--navy) 0%, var(--black) 70%);
+      padding: 2rem 1.25rem 1.75rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border-gold);
+      position: relative; overflow: hidden;
+    }
+    .about-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(245,200,66,0.07) 0%, transparent 60%);
+    }
+    .about-logo { height: 80px; width: auto; margin-bottom: 1rem; position: relative; }
+    .about-name {
+      font-family: var(--font-display);
+      font-size: 1.5rem; font-weight: 600; color: var(--white);
+      margin-bottom: 0.25rem; position: relative;
+    }
+    .about-tagline { font-size: 0.72rem; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; position: relative; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; padding: 1.25rem; }
+    .info-card {
+      background: var(--black-3); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1rem;
+    }
+    .info-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+    .info-value { font-size: 0.8rem; color: var(--white); line-height: 1.4; font-weight: 500; }
+    .info-card.full { grid-column: 1 / -1; }
+    .leader-card {
+      margin: 0 1.25rem;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--black-3) 100%);
+      border: 1px solid var(--border-gold);
+      border-radius: 20px; padding: 1.5rem;
+      display: flex; align-items: center; gap: 1.25rem;
+      position: relative; overflow: hidden;
+    }
+    .leader-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .leader-photo {
+      width: 80px; height: 80px; border-radius: 50%;
+      border: 2px solid var(--border-gold);
+      object-fit: cover; object-position: top; flex-shrink: 0;
+    }
+    .leader-info { flex: 1; }
+    .leader-role { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+    .leader-name { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+    .leader-desc { font-size: 0.72rem; color: var(--gray); line-height: 1.5; }
+
+    /* ── PAGE TITLE ── */
+    .page-title {
+      padding: 1.5rem 1.25rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-title-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+    .page-title-text { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; color: var(--white); }
+
+    /* ── YT BUTTON ── */
+    .yt-channel-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      margin: 0 1.25rem;
+      padding: 1rem; border-radius: 16px;
+      background: var(--black-3); border: 1px solid var(--border);
+      color: white; font-size: 0.78rem; font-weight: 600;
+      text-decoration: none; -webkit-tap-highlight-color: transparent;
+    }
+    .yt-channel-btn:active { border-color: var(--border-gold); }
   </style>
 </head>
 <body>
-<div id="app">
 
-  <!-- SPLASH -->
-  <div id="splash">
-    <img src="https://storage.googleapis.com/rewebly-c2c2b.firebasestorage.app/projects/j0imv2O2DZSmUWxLFNv2/assets/image_1.png" alt="Kingdom Insights Ministries" class="splash-logo" style="width:200px; height:auto;" />
-    <span class="splash-tagline">Kingdom Insights Ministries</span>
-  </div>
-
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-logo">
-      <img src="https://storage.googleapis.com/rewebly-c2c2b.firebasestorage.app/projects/j0imv2O2DZSmUWxLFNv2/assets/image_1.png" alt="KIM" style="height:36px; width:auto;" />
-      <div class="header-title">
-        <span>Kingdom Insights</span>
-        <span>Ministries</span>
-      </div>
-    </div>
-    <div class="live-badge" onclick="showPage('live')">
-      <div class="live-dot"></div>
-      Live
-    </div>
-  </div>
-
-  <!-- MAIN -->
-  <div class="main">
-
-    <!-- HOME -->
-    <div class="page active" id="page-home">
-      <div class="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-lines"></div>
-        <div class="hero-content">
-          <div class="hero-eyebrow">Welcome to</div>
-          <div class="hero-title">Kingdom Insights<br><span>Ministries</span></div>
-          <div class="hero-sub">Apostle Joshua Poro</div>
-        </div>
-      </div>
-
-      <div class="quick-actions">
-        <div class="quick-btn" onclick="showPage('live')">
-          <div class="quick-icon">📺</div>
-          <span>Watch Live</span>
-        </div>
-        <div class="quick-btn" onclick="showPage('give')">
-          <div class="quick-icon">🙏</div>
-          <span>Give</span>
-        </div>
-        <div class="quick-btn" onclick="showPage('events')">
-          <div class="quick-icon">📅</div>
-          <span>Events</span>
-        </div>
-        <div class="quick-btn" onclick="showPage('about')">
-          <div class="quick-icon">✝️</div>
-          <span>About</span>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">Announcements</div>
-        </div>
-        <div class="announcement-card">
-          <div class="announcement-date">This Saturday</div>
-          <div class="announcement-title">Saturday Service — Join Us!</div>
-          <div class="announcement-text">Join us every Saturday for powerful worship and the Word. Service runs from 6:00 PM to 8:00 PM. All are welcome!</div>
-        </div>
-        <div class="announcement-card">
-          <div class="announcement-date">Ongoing</div>
-          <div class="announcement-title">Online Giving Now Available</div>
-          <div class="announcement-text">You can now give your tithes and offerings online securely through our giving portal.</div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">Latest Message</div>
-          <div class="section-link" onclick="showPage('sermons')">See All →</div>
-        </div>
-        <div class="sermon-card" onclick="openYouTube()">
-          <div class="sermon-thumb">
-            <div class="sermon-thumb-bg"></div>
-            <div class="play-btn">▶</div>
-          </div>
-          <div class="sermon-info">
-            <div class="sermon-series">Kingdom Insights Ministries</div>
-            <div class="sermon-title">Latest Message from Apostle Joshua Poro</div>
-            <div class="sermon-meta">
-              <span>Watch on YouTube</span>
-              <span>🔴 Subscribe</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SERMONS -->
-    <div class="page" id="page-sermons">
-      <div class="sermons-page">
-        <div class="section-header">
-          <div class="section-title">Messages</div>
-        </div>
-        <div class="filter-row">
-          <div class="filter-chip active">All</div>
-          <div class="filter-chip">Teaching</div>
-          <div class="filter-chip">Worship</div>
-          <div class="filter-chip">Prayer</div>
-          <div class="filter-chip">Series</div>
-        </div>
-        <div class="sermon-card" onclick="openYouTube()">
-          <div class="sermon-thumb">
-            <div class="sermon-thumb-bg"></div>
-            <div class="play-btn">▶</div>
-          </div>
-          <div class="sermon-info">
-            <div class="sermon-series">Kingdom Insights Ministries</div>
-            <div class="sermon-title">Watch Our Latest Messages</div>
-            <div class="sermon-meta">
-              <span>YouTube Channel</span>
-              <span>Apostle Joshua Poro</span>
-            </div>
-          </div>
-        </div>
-        <div class="sermon-card" onclick="openYouTube()">
-          <div class="sermon-thumb">
-            <div class="sermon-thumb-bg"></div>
-            <div class="play-btn">▶</div>
-          </div>
-          <div class="sermon-info">
-            <div class="sermon-series">Live Streams & Replays</div>
-            <div class="sermon-title">Sunday Service Recordings</div>
-            <div class="sermon-meta">
-              <span>YouTube Channel</span>
-              <span>Subscribe for alerts</span>
-            </div>
-          </div>
-        </div>
-        <a href="https://www.youtube.com/@joshuaporo" target="_blank" style="display:block; width:100%; padding:1rem; background:linear-gradient(135deg,#ff0000,#cc0000); border-radius:14px; color:white; font-family:'Montserrat',sans-serif; font-size:0.85rem; font-weight:700; text-align:center; text-decoration:none; margin-top:0.5rem;">
-          📺 View All on YouTube
-        </a>
-      </div>
-    </div>
-
-    <!-- LIVE -->
-    <div class="page" id="page-live">
-      <div class="live-page">
-        <div class="live-header">
-          <div class="live-title">Watch Live</div>
-          <div class="live-sub">Kingdom Insights Ministries</div>
-        </div>
-        <div class="youtube-embed">
-          <iframe
-            src="https://www.youtube.com/embed/live_stream?channel=UCyour_channel_id&autoplay=1"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-          </iframe>
-        </div>
-        <a href="https://www.youtube.com/@joshuaporo/live" target="_blank" class="youtube-link-btn">
-          📺 Open Live Stream on YouTube
-        </a>
-        <div class="schedule-card">
-          <div class="schedule-title">Service Schedule</div>
-          <div class="schedule-item">
-            <div class="schedule-day">Saturday</div>
-            <div class="schedule-info">
-              <div class="schedule-name">Saturday Service</div>
-              <div class="schedule-time">10:00 AM — In Person & Online</div>
-            </div>
-          </div>
-          <div class="schedule-item">
-            
-            <div class="schedule-info">
-              
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- GIVE -->
-    <div class="page" id="page-give">
-      <div class="give-page">
-        <div class="give-hero">
-          <span class="give-icon">🙏</span>
-          <div class="give-title">Give Online</div>
-          <div class="give-verse">"Bring the whole tithe into the storehouse..." — Malachi 3:10</div>
-        </div>
-        <div class="give-options">
-          <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="give-btn give-btn-primary">
-            💛 Give via Tithe.ly
-          </a>
-          <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="give-btn give-btn-secondary">
-            📱 One-Time Gift
-          </a>
-          <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="give-btn give-btn-secondary">
-            🔁 Set Up Recurring Gift
-          </a>
-        </div>
-        <div class="give-info">
-          <div class="give-info-title">Why We Give</div>
-          <div class="give-info-text">
-            Your generous giving enables Kingdom Insights Ministries to spread the Gospel, support our community, and build the Kingdom of God. Every seed you sow makes an eternal impact. Thank you for your faithfulness!
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- EVENTS -->
-    <div class="page" id="page-events">
-      <div class="events-page">
-        <div class="section-header">
-          <div class="section-title">2026 Services &amp; Events</div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Mar</div>
-            <div class="event-day">14</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Mar</div>
-            <div class="event-day">21</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Mar</div>
-            <div class="event-day">28</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Apr</div>
-            <div class="event-day">4</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Apr</div>
-            <div class="event-day">11</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Apr</div>
-            <div class="event-day">18</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Apr</div>
-            <div class="event-day">25</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">May</div>
-            <div class="event-day">2</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">May</div>
-            <div class="event-day">9</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">May</div>
-            <div class="event-day">16</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">May</div>
-            <div class="event-day">23</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">May</div>
-            <div class="event-day">30</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Jun</div>
-            <div class="event-day">6</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Jun</div>
-            <div class="event-day">13</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Jun</div>
-            <div class="event-day">20</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Jun</div>
-            <div class="event-day">27</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Jul</div>
-            <div class="event-day">4</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Jul</div>
-            <div class="event-day">11</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Jul</div>
-            <div class="event-day">18</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Jul</div>
-            <div class="event-day">25</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Aug</div>
-            <div class="event-day">1</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Aug</div>
-            <div class="event-day">8</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Aug</div>
-            <div class="event-day">15</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Aug</div>
-            <div class="event-day">22</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Aug</div>
-            <div class="event-day">29</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Sep</div>
-            <div class="event-day">5</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Sep</div>
-            <div class="event-day">12</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Sep</div>
-            <div class="event-day">19</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Sep</div>
-            <div class="event-day">26</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Oct</div>
-            <div class="event-day">3</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Oct</div>
-            <div class="event-day">10</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Oct</div>
-            <div class="event-day">17</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Oct</div>
-            <div class="event-day">24</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Oct</div>
-            <div class="event-day">31</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Nov</div>
-            <div class="event-day">7</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Nov</div>
-            <div class="event-day">14</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Nov</div>
-            <div class="event-day">21</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Nov</div>
-            <div class="event-day">28</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Dec</div>
-            <div class="event-day">5</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Dec</div>
-            <div class="event-day">12</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Dec</div>
-            <div class="event-day">19</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Dec</div>
-            <div class="event-day">26</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Saturday Service</div>
-            <div class="event-meta">6:00 PM – 8:00 PM · In Person &amp; Online<br>Kingdom Insights Ministries</div>
-            <span class="event-tag">Weekly</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Apr</div>
-            <div class="event-day">5</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Easter Sunday Service</div>
-            <div class="event-meta">Time TBD · In Person &amp; Online<br>Special Easter Celebration — He is Risen!</div>
-            <span class="event-tag">Special</span>
-          </div>
-        </div>
-        <div class="event-card">
-          <div class="event-date-box">
-            <div class="event-month">Dec</div>
-            <div class="event-day">25</div>
-          </div>
-          <div class="event-details">
-            <div class="event-title">Christmas Service</div>
-            <div class="event-meta">Time TBD · In Person &amp; Online<br>Christmas Celebration Service</div>
-            <span class="event-tag">Special</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ABOUT -->
-    <div class="page" id="page-about">
-      <div class="about-page">
-        <div class="about-hero">
-          <img src="https://storage.googleapis.com/rewebly-c2c2b.firebasestorage.app/projects/j0imv2O2DZSmUWxLFNv2/assets/image_1.png" alt="Kingdom Insights Ministries" class="about-logo" style="width:120px; height:auto;" />
-          <div class="about-church-name">Kingdom Insights Ministries</div>
-          <div class="about-tagline">Apostle Joshua Poro</div>
-        </div>
-
-        <div class="staff-section">
-          <div class="staff-title">Our Leadership</div>
-          <div class="staff-card">
-            <div class="staff-avatar">✝️</div>
-            <div>
-              <div class="staff-name">Apostle Joshua Poro</div>
-              <div class="staff-role">Senior Pastor & Founder</div>
-              <div class="staff-bio">Leading Kingdom Insights Ministries with a heart for God's people and a passion for Kingdom impact.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="about-info">
-          <div class="info-card">
-            <div class="info-label">Website</div>
-            <div class="info-value">kim.church</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">YouTube</div>
-            <div class="info-value" onclick="openYouTube()" style="color:var(--gold);cursor:pointer;">Kingdom Insights Ministries</div>
-          </div>
-          <div class="info-card">
-            <div class="info-label">Sunday Service</div>
-            <div class="info-value">10:00 AM — In Person & Online</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- BOTTOM NAV -->
-  <div class="bottom-nav">
-    <div class="nav-item active" onclick="showPage('home')" id="nav-home">
-      <div class="nav-icon">🏠</div>
-      <div class="nav-label">Home</div>
-    </div>
-    <div class="nav-item" onclick="showPage('sermons')" id="nav-sermons">
-      <div class="nav-icon">🎙️</div>
-      <div class="nav-label">Messages</div>
-    </div>
-    <div class="nav-item" onclick="showPage('live')" id="nav-live">
-      <div class="nav-icon">📺</div>
-      <div class="nav-label">Live</div>
-    </div>
-    <div class="nav-item" onclick="showPage('give')" id="nav-give">
-      <div class="nav-icon">🙏</div>
-      <div class="nav-label">Give</div>
-    </div>
-    <div class="nav-item" onclick="showPage('events')" id="nav-events">
-      <div class="nav-icon">📅</div>
-      <div class="nav-label">Events</div>
-    </div>
-  </div>
-
+<!-- SPLASH -->
+<div id="splash">
+  <img src="https://storage.googleapis.com/rewebly-c2c2b.firebasestorage.app/projects/j0imv2O2DZSmUWxLFNv2/assets/image_1.png" alt="KIM" class="splash-logo" />
+  <div class="splash-tagline">Kingdom Insights Ministries</div>
+  <div class="splash-bar"></div>
 </div>
 
+<!-- APP -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <img src="https://storage.googleapis.com/rewebly-c2c2b.firebasestorage.app/projects/j0imv2O2DZSmUWxLFNv2/assets/image_1.png" alt="KIM" class="topbar-logo" />
+    <span class="topbar-title" id="topbar-title">Home</span>
+    <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="topbar-give">Give</a>
+  </div>
+
+  <!-- SCROLL AREA -->
+  <div class="scroll-area" id="scroll-area">
+
+    <!-- HOME PAGE -->
+    <div class="page active" id="page-home">
+      <div class="hero-banner">
+        <div class="hero-eyebrow">Welcome to</div>
+        <h1 class="hero-title">Kingdom<br><em>Insights</em></h1>
+        <p class="hero-sub">Every Saturday · 6:00–8:00 PM · Hurst, TX</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="navigate('live')">Watch Live</button>
+          <button class="btn-outline" onclick="navigate('events')">View Services</button>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-grid">
+        <button class="quick-item" onclick="navigate('live')">
+          <div class="quick-icon red">📺</div>
+          <span class="quick-label">Live</span>
+        </button>
+        <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="quick-item">
+          <div class="quick-icon gold">🙏</div>
+          <span class="quick-label">Give</span>
+        </a>
+        <button class="quick-item" onclick="navigate('events')">
+          <div class="quick-icon navy">📅</div>
+          <span class="quick-label">Events</span>
+        </button>
+        <button class="quick-item" onclick="navigate('about')">
+          <div class="quick-icon green">✝️</div>
+          <span class="quick-label">About</span>
+        </button>
+      </div>
+
+      <!-- Announcement -->
+      <div class="announce-card">
+        <div class="announce-tag">📣 Announcement</div>
+        <div class="announce-title">Saturday Service — Join Us!</div>
+        <div class="announce-text">Join us every Saturday from 6:00–8:00 PM for powerful worship and the Word. Intercession begins at 5:00 PM. All are welcome!</div>
+      </div>
+
+      <!-- Latest Message -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-label">Latest Messages</span>
+          <div class="section-line"></div>
+        </div>
+      </div>
+      <div style="padding: 0 1.25rem; padding-bottom: 0.5rem;">
+        <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="sermon-card">
+          <div class="sermon-thumb">🎙️</div>
+          <div class="sermon-info">
+            <div class="sermon-series">Kingdom Insights</div>
+            <div class="sermon-title">Latest Teaching</div>
+            <div class="sermon-meta">Apostle Joshua Poro</div>
+          </div>
+          <div class="sermon-play">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="sermon-card">
+          <div class="sermon-thumb">📖</div>
+          <div class="sermon-info">
+            <div class="sermon-series">Bible Study</div>
+            <div class="sermon-title">Watch on YouTube</div>
+            <div class="sermon-meta">@joshuaporo</div>
+          </div>
+          <div class="sermon-play">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- MESSAGES PAGE -->
+    <div class="page" id="page-messages">
+      <div class="page-title">
+        <div class="page-title-label">Watch & Listen</div>
+        <div class="page-title-text">Messages</div>
+      </div>
+      <div style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="sermon-card" style="margin-bottom:0">
+          <div class="sermon-thumb">🎙️</div>
+          <div class="sermon-info">
+            <div class="sermon-series">Kingdom Insights</div>
+            <div class="sermon-title">Latest Sermons</div>
+            <div class="sermon-meta">Watch on YouTube</div>
+          </div>
+          <div class="sermon-play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        </a>
+        <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="sermon-card" style="margin-bottom:0">
+          <div class="sermon-thumb">📖</div>
+          <div class="sermon-info">
+            <div class="sermon-series">Bible Study</div>
+            <div class="sermon-title">Teaching Series</div>
+            <div class="sermon-meta">Watch on YouTube</div>
+          </div>
+          <div class="sermon-play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        </a>
+        <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="sermon-card" style="margin-bottom:0">
+          <div class="sermon-thumb">✝️</div>
+          <div class="sermon-info">
+            <div class="sermon-series">Full Archive</div>
+            <div class="sermon-title">All Messages</div>
+            <div class="sermon-meta">YouTube Channel</div>
+          </div>
+          <div class="sermon-play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        </a>
+      </div>
+      <div style="padding: 0 1.25rem;">
+        <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="yt-channel-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          Visit YouTube Channel
+        </a>
+      </div>
+    </div>
+
+    <!-- LIVE PAGE -->
+    <div class="page" id="page-live">
+      <div class="live-status">
+        <div class="live-dot"></div>
+        <span class="live-label">Live Stream</span>
+      </div>
+      <div class="live-embed">
+        <iframe src="https://www.youtube.com/embed/live_stream?channel=UCyour_channel_id" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+      </div>
+      <a href="https://www.youtube.com/@joshuaporo/live" target="_blank" class="live-btn" style="text-decoration:none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        Open Live on YouTube
+      </a>
+      <div class="schedule-block">
+        <div class="schedule-header">Service Schedule</div>
+        <div class="schedule-row">
+          <div class="schedule-day-pill">Saturday</div>
+          <div class="schedule-details">
+            <div class="schedule-name">Intercession & Prayer</div>
+            <div class="schedule-time">5:00 PM – 6:00 PM · Open to All</div>
+          </div>
+        </div>
+        <div class="schedule-row">
+          <div class="schedule-day-pill">Saturday</div>
+          <div class="schedule-details">
+            <div class="schedule-name">Saturday Service</div>
+            <div class="schedule-time">6:00 PM – 8:00 PM · In Person & Online</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GIVE PAGE -->
+    <div class="page" id="page-give">
+      <div class="give-hero">
+        <div class="hero-eyebrow">Support the Ministry</div>
+        <div class="give-title">Give to<br><em style="color:var(--gold);font-family:var(--font-display);font-style:italic;">Kingdom</em></div>
+        <div class="give-verse">"Give, and it will be given to you." — Luke 6:38</div>
+      </div>
+      <div class="give-options">
+        <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="give-option">
+          <div class="give-option-icon">🙏</div>
+          <div class="give-option-info">
+            <div class="give-option-title">Tithe</div>
+            <div class="give-option-desc">Honor God with your first fruits</div>
+          </div>
+          <span class="give-arrow">›</span>
+        </a>
+        <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="give-option">
+          <div class="give-option-icon">✝️</div>
+          <div class="give-option-info">
+            <div class="give-option-title">General Offering</div>
+            <div class="give-option-desc">Support the work of the ministry</div>
+          </div>
+          <span class="give-arrow">›</span>
+        </a>
+        <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="give-option">
+          <div class="give-option-icon">🌍</div>
+          <div class="give-option-info">
+            <div class="give-option-title">Missions & Outreach</div>
+            <div class="give-option-desc">Fund the Kingdom beyond our walls</div>
+          </div>
+          <span class="give-arrow">›</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- EVENTS PAGE -->
+    <div class="page" id="page-events">
+      <div class="page-title">
+        <div class="page-title-label">2026 Schedule</div>
+        <div class="page-title-text">Services & Events</div>
+      </div>
+      <div style="height:1rem;"></div>
+      <div class="events-list">
+        <div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Mar</span>
+            <span class="event-day">14</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Mar</span>
+            <span class="event-day">21</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Mar</span>
+            <span class="event-day">28</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Apr</span>
+            <span class="event-day">4</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Apr</span>
+            <span class="event-day">11</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Apr</span>
+            <span class="event-day">18</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Apr</span>
+            <span class="event-day">25</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">May</span>
+            <span class="event-day">2</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">May</span>
+            <span class="event-day">9</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">May</span>
+            <span class="event-day">16</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">May</span>
+            <span class="event-day">23</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">May</span>
+            <span class="event-day">30</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Jun</span>
+            <span class="event-day">6</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Jun</span>
+            <span class="event-day">13</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Jun</span>
+            <span class="event-day">20</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Jun</span>
+            <span class="event-day">27</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Jul</span>
+            <span class="event-day">4</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Jul</span>
+            <span class="event-day">11</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Jul</span>
+            <span class="event-day">18</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Jul</span>
+            <span class="event-day">25</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Aug</span>
+            <span class="event-day">1</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Aug</span>
+            <span class="event-day">8</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Aug</span>
+            <span class="event-day">15</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Aug</span>
+            <span class="event-day">22</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Aug</span>
+            <span class="event-day">29</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Sep</span>
+            <span class="event-day">5</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Sep</span>
+            <span class="event-day">12</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Sep</span>
+            <span class="event-day">19</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Sep</span>
+            <span class="event-day">26</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Oct</span>
+            <span class="event-day">3</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Oct</span>
+            <span class="event-day">10</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Oct</span>
+            <span class="event-day">17</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Oct</span>
+            <span class="event-day">24</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Oct</span>
+            <span class="event-day">31</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Nov</span>
+            <span class="event-day">7</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Nov</span>
+            <span class="event-day">14</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Nov</span>
+            <span class="event-day">21</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Nov</span>
+            <span class="event-day">28</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Dec</span>
+            <span class="event-day">5</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Dec</span>
+            <span class="event-day">12</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Dec</span>
+            <span class="event-day">19</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card">
+          <div class="event-date">
+            <span class="event-month">Dec</span>
+            <span class="event-day">26</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Saturday Service</div>
+            <div class="event-time">6:00 PM – 8:00 PM</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge">Weekly</span>
+        </div>
+<div class="event-card special">
+          <div class="event-date">
+            <span class="event-month">Apr</span>
+            <span class="event-day">5</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Easter Sunday Service</div>
+            <div class="event-time">Time TBD</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge special">Special</span>
+        </div>
+<div class="event-card special">
+          <div class="event-date">
+            <span class="event-month">Dec</span>
+            <span class="event-day">25</span>
+          </div>
+          <div class="event-info">
+            <div class="event-title">Christmas Service</div>
+            <div class="event-time">Time TBD</div>
+            <div class="event-location">In Person & Online</div>
+          </div>
+          <span class="event-badge special">Special</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div class="page" id="page-about">
+      <div class="about-hero">
+        <img src="https://storage.googleapis.com/rewebly-c2c2b.firebasestorage.app/projects/j0imv2O2DZSmUWxLFNv2/assets/image_1.png" alt="KIM" class="about-logo" />
+        <div class="about-name">Kingdom Insights Ministries</div>
+        <div class="about-tagline">Revelation · Awakening · Purpose</div>
+      </div>
+
+      <div style="padding: 1.25rem 1.25rem 0.5rem;">
+        <div class="leader-card">
+          <img src="/apostle-joshua-poro.png" alt="Apostle Joshua Poro" class="leader-photo" />
+          <div class="leader-info">
+            <div class="leader-role">Vision Bearer & Lead Apostle</div>
+            <div class="leader-name">Apostle Joshua Poro</div>
+            <div class="leader-desc">Called to reveal Christ with depth, clarity, and apostolic fire.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-label">📍 Location</div>
+          <div class="info-value">1418 W Pipeline Rd #145, Hurst, TX 76053</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">📞 Phone</div>
+          <div class="info-value"><a href="tel:+14694648295" style="color:inherit;text-decoration:none;">(469) 464-8295</a></div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">📧 Email</div>
+          <div class="info-value"><a href="mailto:jporo@kim.church" style="color:inherit;text-decoration:none;">jporo@kim.church</a></div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">🌐 Website</div>
+          <div class="info-value"><a href="https://kim.church" target="_blank" style="color:var(--gold);text-decoration:none;">kim.church</a></div>
+        </div>
+        <div class="info-card full">
+          <div class="info-label">📱 Follow Us</div>
+          <div style="display:flex;gap:0.75rem;margin-top:0.5rem;flex-wrap:wrap;">
+            <a href="https://www.youtube.com/@joshuaporo" target="_blank" style="display:flex;align-items:center;gap:0.4rem;text-decoration:none;color:white;font-size:0.75rem;font-weight:600;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YouTube
+            </a>
+            <a href="https://www.facebook.com/JoshuaPoroII" target="_blank" style="display:flex;align-items:center;gap:0.4rem;text-decoration:none;color:white;font-size:0.75rem;font-weight:600;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook
+            </a>
+            <a href="https://www.tiktok.com/@porojosh" target="_blank" style="display:flex;align-items:center;gap:0.4rem;text-decoration:none;color:white;font-size:0.75rem;font-weight:600;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>TikTok
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end scroll-area -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="navigate('home')" id="nav-home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="nav-label">Home</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="navigate('messages')" id="nav-messages">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      <span class="nav-label">Messages</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="navigate('live')" id="nav-live">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
+      <span class="nav-label">Live</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="navigate('give')" id="nav-give">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span class="nav-label">Give</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="navigate('events')" id="nav-events">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span class="nav-label">Events</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" onclick="navigate('about')" id="nav-about">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="nav-label">About</span>
+      <div class="nav-dot"></div>
+    </button>
+  </nav>
+
+</div><!-- end app -->
+
 <script>
-  // Splash screen
+  const pages = ['home','messages','live','give','events','about'];
+  const titles = { home:'Home', messages:'Messages', live:'Live Stream', give:'Give', events:'Services & Events', about:'About Us' };
+
+  function navigate(page) {
+    pages.forEach(p => {
+      document.getElementById('page-' + p)?.classList.remove('active');
+      document.getElementById('nav-' + p)?.classList.remove('active');
+    });
+    document.getElementById('page-' + page)?.classList.add('active');
+    document.getElementById('nav-' + page)?.classList.add('active');
+    document.getElementById('topbar-title').textContent = titles[page] || '';
+    document.getElementById('scroll-area').scrollTop = 0;
+  }
+
+  // Splash
   window.addEventListener('load', () => {
     setTimeout(() => {
-      document.getElementById('splash').classList.add('hide');
-    }, 2000);
+      document.getElementById('splash').classList.add('hidden');
+    }, 1800);
   });
-
-  // Page navigation
-  function showPage(name) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const page = document.getElementById('page-' + name);
-    const nav = document.getElementById('nav-' + name);
-    if (page) page.classList.add('active');
-    if (nav) nav.classList.add('active');
-    document.querySelector('.main').scrollTo(0, 0);
-  }
-
-  function openYouTube() {
-    window.open('https://www.youtube.com/@joshuaporo', '_blank');
-  }
-
-  // PWA Service Worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
 </script>
 </body>
 </html>
