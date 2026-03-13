@@ -3,33 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0a0a0f" />
+  <meta name="theme-color" content="#ffffff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="KIM Church" />
   <title>Kingdom Insights Ministries</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/png" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/icon-180.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --navy: #0D1B5E;
       --navy-light: #1a2d8a;
-      --gold: #F5C842;
-      --gold-dim: #c9a227;
-      --black: #0a0a0f;
-      --black-2: #111118;
-      --black-3: #18181f;
-      --black-4: #1e1e28;
+      --gold: #c9930a;
+      --gold-bright: #F5C842;
+      --gold-bg: #fef9ec;
       --white: #ffffff;
-      --gray: rgba(255,255,255,0.5);
-      --gray-dim: rgba(255,255,255,0.2);
-      --border: rgba(255,255,255,0.08);
-      --border-gold: rgba(245,200,66,0.25);
+      --bg: #f5f5f7;
+      --bg-card: #ffffff;
+      --bg-card2: #f5f5f7;
+      --text: #0a0a0f;
+      --text-2: #3a3a4a;
+      --text-3: #7a7a8a;
+      --border: rgba(0,0,0,0.08);
+      --border-gold: rgba(201,147,10,0.2);
+      --shadow: 0 2px 16px rgba(0,0,0,0.07);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
       --font-display: 'Cormorant Garamond', Georgia, serif;
       --font-body: 'Inter', sans-serif;
       --safe-top: env(safe-area-inset-top, 0px);
@@ -37,10 +40,9 @@
     }
 
     html, body {
-      height: 100%;
-      overflow: hidden;
-      background: var(--black);
-      color: var(--white);
+      height: 100%; overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
       font-family: var(--font-body);
       -webkit-font-smoothing: antialiased;
     }
@@ -48,58 +50,50 @@
     /* ── SPLASH ── */
     #splash {
       position: fixed; inset: 0; z-index: 100;
-      background: var(--black);
+      background: var(--white);
       display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 1.5rem;
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      align-items: center; justify-content: center; gap: 1.25rem;
+      transition: opacity 0.5s ease;
     }
-    #splash.hidden { opacity: 0; transform: scale(1.05); pointer-events: none; }
-    .splash-logo { width: 180px; animation: splashPop 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    #splash.hidden { opacity: 0; pointer-events: none; }
+    .splash-logo { width: 160px; animation: splashPop 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards; }
     .splash-tagline {
       font-family: var(--font-display);
-      font-size: 1.1rem; color: var(--gold);
-      letter-spacing: 0.15em; font-style: italic;
-      opacity: 0; animation: fadeUp 0.6s ease 0.6s forwards;
+      font-size: 1rem; color: var(--gold);
+      letter-spacing: 0.12em; font-style: italic;
+      opacity: 0; animation: fadeUp 0.5s ease 0.5s forwards;
     }
     .splash-bar {
-      width: 60px; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: 0; animation: fadeUp 0.4s ease 1s forwards;
+      width: 40px; height: 2px;
+      background: linear-gradient(90deg, var(--navy), var(--gold));
+      border-radius: 2px;
+      opacity: 0; animation: fadeUp 0.4s ease 0.8s forwards;
     }
-    @keyframes splashPop { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes splashPop { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 
     /* ── APP SHELL ── */
-    #app {
-      display: flex; flex-direction: column;
-      height: 100dvh; overflow: hidden;
-    }
+    #app { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
 
     /* ── TOP BAR ── */
     .topbar {
       flex-shrink: 0;
-      padding: calc(var(--safe-top) + 0.75rem) 1.25rem 0.75rem;
+      padding: calc(var(--safe-top) + 0.65rem) 1.25rem 0.65rem;
       display: flex; align-items: center; justify-content: space-between;
-      background: var(--black);
+      background: var(--white);
       border-bottom: 1px solid var(--border);
-      position: relative; z-index: 10;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.05);
     }
-    .topbar::after {
-      content: '';
-      position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
-    }
-    .topbar-logo { height: 36px; width: auto; }
+    .topbar-logo { height: 32px; width: auto; }
     .topbar-title {
       font-family: var(--font-display);
-      font-size: 1.05rem; font-weight: 600;
-      color: var(--white); letter-spacing: 0.02em;
+      font-size: 1rem; font-weight: 600; color: var(--navy);
+      letter-spacing: 0.02em;
     }
     .topbar-give {
       padding: 0.4rem 1rem;
-      background: var(--gold);
-      color: var(--black);
-      font-size: 0.72rem; font-weight: 700;
+      background: var(--navy); color: var(--white);
+      font-size: 0.7rem; font-weight: 700;
       border-radius: 20px; text-decoration: none;
       letter-spacing: 0.05em; text-transform: uppercase;
       transition: opacity 0.2s;
@@ -110,7 +104,6 @@
     .scroll-area {
       flex: 1; overflow-y: auto; overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
     }
     .scroll-area::-webkit-scrollbar { display: none; }
 
@@ -122,87 +115,83 @@
     .bottom-nav {
       flex-shrink: 0;
       padding-bottom: var(--safe-bottom);
-      background: var(--black-2);
+      background: var(--white);
       border-top: 1px solid var(--border);
-      display: flex; position: relative;
-    }
-    .bottom-nav::before {
-      content: '';
-      position: absolute; top: -1px; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.05);
+      display: flex;
     }
     .nav-item {
       flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 0.3rem; padding: 0.65rem 0.25rem;
+      gap: 0.25rem; padding: 0.6rem 0.25rem;
       background: none; border: none; cursor: pointer;
-      color: var(--gray); transition: color 0.2s;
-      -webkit-tap-highlight-color: transparent;
+      color: var(--text-3); transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent; position: relative;
     }
-    .nav-item.active { color: var(--gold); }
+    .nav-item.active { color: var(--navy); }
     .nav-item svg { width: 22px; height: 22px; stroke-width: 1.6; }
-    .nav-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
-    .nav-dot {
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--gold);
-      position: absolute; bottom: calc(var(--safe-bottom) + 0.35rem);
-      opacity: 0; transition: opacity 0.2s;
+    .nav-label { font-size: 0.58rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+    .nav-indicator {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 20px; height: 2px; border-radius: 2px;
+      background: var(--navy); opacity: 0; transition: opacity 0.2s;
     }
-    .nav-item.active .nav-dot { opacity: 1; }
+    .nav-item.active .nav-indicator { opacity: 1; }
 
-    /* ── HERO BANNER ── */
+    /* ── HERO ── */
     .hero-banner {
-      position: relative; overflow: hidden;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--black) 60%);
+      background: linear-gradient(135deg, var(--navy) 0%, #1a2d8a 100%);
       padding: 2.5rem 1.5rem 2rem;
-      margin-bottom: 0;
+      position: relative; overflow: hidden;
     }
     .hero-banner::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 70% 50%, rgba(245,200,66,0.08) 0%, transparent 70%);
+      background: radial-gradient(ellipse at 80% 20%, rgba(245,200,66,0.15) 0%, transparent 60%);
     }
     .hero-banner::after {
       content: '';
-      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+      position: absolute; bottom: -1px; left: 0; right: 0;
+      height: 20px; background: var(--bg);
+      clip-path: ellipse(55% 100% at 50% 100%);
     }
     .hero-eyebrow {
-      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--gold);
-      margin-bottom: 0.5rem;
+      font-size: 0.62rem; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(245,200,66,0.8);
+      margin-bottom: 0.4rem; position: relative;
     }
     .hero-title {
       font-family: var(--font-display);
-      font-size: 2.4rem; font-weight: 600; line-height: 1.1;
-      color: var(--white); margin-bottom: 0.75rem;
+      font-size: 2.6rem; font-weight: 600; line-height: 1.05;
+      color: var(--white); margin-bottom: 0.6rem; position: relative;
     }
-    .hero-title em { color: var(--gold); font-style: italic; }
-    .hero-sub { font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.6; max-width: 280px; }
-    .hero-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .hero-title em { color: var(--gold-bright); font-style: italic; }
+    .hero-sub { font-size: 0.78rem; color: rgba(255,255,255,0.6); line-height: 1.6; position: relative; }
+    .hero-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; position: relative; flex-wrap: wrap; }
     .btn-primary {
       padding: 0.65rem 1.4rem;
-      background: var(--gold); color: var(--black);
-      font-size: 0.75rem; font-weight: 700; border-radius: 24px;
-      text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;
-      transition: opacity 0.2s; border: none; cursor: pointer;
+      background: var(--white); color: var(--navy);
+      font-size: 0.72rem; font-weight: 700; border-radius: 24px;
+      text-decoration: none; letter-spacing: 0.04em; text-transform: uppercase;
+      border: none; cursor: pointer; transition: opacity 0.2s;
+      box-shadow: var(--shadow);
     }
-    .btn-primary:active { opacity: 0.8; }
+    .btn-primary:active { opacity: 0.85; }
     .btn-outline {
       padding: 0.65rem 1.4rem;
       background: transparent; color: var(--white);
-      font-size: 0.75rem; font-weight: 600; border-radius: 24px;
-      text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;
-      border: 1px solid var(--border); transition: border-color 0.2s;
-      cursor: pointer;
+      font-size: 0.72rem; font-weight: 600; border-radius: 24px;
+      text-decoration: none; letter-spacing: 0.04em; text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.3); cursor: pointer;
+      transition: background 0.2s;
     }
-    .btn-outline:active { border-color: var(--gold); }
+    .btn-outline:active { background: rgba(255,255,255,0.1); }
 
     /* ── SECTION ── */
-    .section { padding: 1.75rem 1.25rem 0; }
-    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .section { padding: 1.5rem 1.25rem 0; }
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
     .section-label {
-      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em;
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.2em;
       text-transform: uppercase; color: var(--gold);
     }
     .section-line { flex: 1; height: 1px; background: var(--border); }
@@ -211,79 +200,88 @@
     .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; padding: 1.25rem; }
     .quick-item {
       display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-      background: var(--black-3); border: 1px solid var(--border);
-      border-radius: 16px; padding: 1rem 0.5rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 1rem 0.5rem;
       text-decoration: none; cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s, box-shadow 0.15s;
       -webkit-tap-highlight-color: transparent;
     }
-    .quick-item:active { background: var(--black-4); border-color: var(--border-gold); }
+    .quick-item:active { transform: scale(0.96); box-shadow: none; }
     .quick-icon {
       width: 44px; height: 44px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
     }
-    .quick-icon.gold { background: rgba(245,200,66,0.12); }
-    .quick-icon.navy { background: rgba(13,27,94,0.4); }
-    .quick-icon.red { background: rgba(255,0,0,0.1); }
-    .quick-icon.green { background: rgba(52,199,89,0.1); }
-    .quick-label { font-size: 0.65rem; font-weight: 600; color: var(--white); text-align: center; letter-spacing: 0.02em; }
+    .quick-icon.red { background: #fff1f0; }
+    .quick-icon.gold { background: var(--gold-bg); }
+    .quick-icon.navy { background: #eef1ff; }
+    .quick-icon.green { background: #f0faf4; }
+    .quick-label { font-size: 0.62rem; font-weight: 600; color: var(--text-2); text-align: center; }
 
-    /* ── ANNOUNCEMENT CARD ── */
+    /* ── ANNOUNCE CARD ── */
     .announce-card {
       margin: 0 1.25rem;
-      background: linear-gradient(135deg, var(--navy) 0%, #0f1840 100%);
-      border: 1px solid var(--border-gold);
+      background: linear-gradient(135deg, var(--navy) 0%, #1a2d8a 100%);
       border-radius: 20px; padding: 1.25rem 1.5rem;
       position: relative; overflow: hidden;
+      box-shadow: var(--shadow-lg);
     }
     .announce-card::before {
       content: '';
       position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      background: linear-gradient(90deg, transparent, rgba(245,200,66,0.5), transparent);
     }
     .announce-tag {
-      display: inline-block; font-size: 0.6rem; font-weight: 700;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 0.5rem;
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--gold-bright); margin-bottom: 0.4rem; display: block;
     }
-    .announce-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--white); margin-bottom: 0.4rem; }
-    .announce-text { font-size: 0.78rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    .announce-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: white; margin-bottom: 0.35rem; }
+    .announce-text { font-size: 0.75rem; color: rgba(255,255,255,0.65); line-height: 1.6; }
 
     /* ── SERMON CARD ── */
     .sermon-card {
-      background: var(--black-3); border: 1px solid var(--border);
-      border-radius: 20px; overflow: hidden;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 18px; overflow: hidden;
       display: flex; align-items: center; gap: 1rem;
       padding: 1rem 1.25rem; margin-bottom: 0.75rem;
       cursor: pointer; text-decoration: none;
-      transition: border-color 0.2s; -webkit-tap-highlight-color: transparent;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .sermon-card:active { border-color: var(--border-gold); }
+    .sermon-card:active { transform: scale(0.98); }
     .sermon-thumb {
-      width: 60px; height: 60px; border-radius: 12px;
-      background: linear-gradient(135deg, var(--navy), var(--black-4));
+      width: 56px; height: 56px; border-radius: 12px;
+      background: #eef1ff;
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; font-size: 1.5rem;
+      flex-shrink: 0;
     }
     .sermon-info { flex: 1; min-width: 0; }
-    .sermon-series { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.25rem; }
-    .sermon-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--white); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sermon-meta { font-size: 0.7rem; color: var(--gray); margin-top: 0.2rem; }
+    .sermon-series { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.2rem; }
+    .sermon-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--text); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sermon-meta { font-size: 0.68rem; color: var(--text-3); margin-top: 0.15rem; }
     .sermon-play {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--gold); color: var(--black);
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--navy); color: white;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
+
+    /* ── PAGE TITLE ── */
+    .page-title {
+      padding: 1.5rem 1.25rem 1rem;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .page-title-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.25rem; }
+    .page-title-text { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; color: var(--navy); }
 
     /* ── LIVE PAGE ── */
     .live-status {
       display: flex; align-items: center; gap: 0.5rem;
-      padding: 1.5rem 1.25rem 0.75rem;
+      padding: 1.25rem 1.25rem 0.75rem;
     }
     .live-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #ff3b30;
+      width: 8px; height: 8px; border-radius: 50%; background: #ff3b30;
       box-shadow: 0 0 0 0 rgba(255,59,48,0.4);
       animation: livePulse 2s infinite;
     }
@@ -292,191 +290,177 @@
       70% { box-shadow: 0 0 0 8px rgba(255,59,48,0); }
       100% { box-shadow: 0 0 0 0 rgba(255,59,48,0); }
     }
-    .live-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #ff3b30; }
+    .live-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #ff3b30; }
     .live-embed {
-      margin: 0 1.25rem;
-      border-radius: 20px; overflow: hidden;
-      background: var(--black-3); border: 1px solid var(--border);
-      aspect-ratio: 16/9;
+      margin: 0 1.25rem; border-radius: 18px; overflow: hidden;
+      background: #000; border: 1px solid var(--border);
+      aspect-ratio: 16/9; box-shadow: var(--shadow);
     }
     .live-embed iframe { width: 100%; height: 100%; border: none; display: block; }
     .live-btn {
       display: flex; align-items: center; justify-content: center; gap: 0.6rem;
-      margin: 1rem 1.25rem 0;
-      padding: 1rem; border-radius: 16px;
+      margin: 1rem 1.25rem 0; padding: 1rem; border-radius: 16px;
       background: linear-gradient(135deg, #ff0000, #cc0000);
-      color: white; font-size: 0.8rem; font-weight: 700;
+      color: white; font-size: 0.78rem; font-weight: 700;
       text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;
-      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 4px 16px rgba(255,0,0,0.2);
     }
     .schedule-block {
-      margin: 1.5rem 1.25rem 0;
-      background: var(--black-3); border: 1px solid var(--border);
-      border-radius: 20px; overflow: hidden;
+      margin: 1.25rem 1.25rem 0;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 18px; overflow: hidden; box-shadow: var(--shadow);
     }
     .schedule-header {
-      padding: 1rem 1.25rem;
+      padding: 0.9rem 1.25rem;
+      background: var(--bg-card2);
       border-bottom: 1px solid var(--border);
-      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em;
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.2em;
       text-transform: uppercase; color: var(--gold);
     }
     .schedule-row {
       display: flex; align-items: center; gap: 1rem;
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.25rem; border-bottom: 1px solid var(--border);
     }
     .schedule-row:last-child { border-bottom: none; }
     .schedule-day-pill {
       min-width: 72px; padding: 0.3rem 0.75rem;
-      background: rgba(245,200,66,0.1); border: 1px solid var(--border-gold);
-      border-radius: 20px; text-align: center;
-      font-size: 0.65rem; font-weight: 700; color: var(--gold);
-      letter-spacing: 0.05em;
+      background: #eef1ff; border-radius: 20px; text-align: center;
+      font-size: 0.62rem; font-weight: 700; color: var(--navy);
     }
-    .schedule-details { flex: 1; }
-    .schedule-name { font-size: 0.85rem; font-weight: 600; color: var(--white); }
-    .schedule-time { font-size: 0.72rem; color: var(--gray); margin-top: 0.15rem; }
+    .schedule-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .schedule-time { font-size: 0.7rem; color: var(--text-3); margin-top: 0.15rem; }
 
     /* ── GIVE PAGE ── */
     .give-hero {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--black) 70%);
-      padding: 2rem 1.25rem 1.5rem;
+      background: linear-gradient(135deg, var(--navy) 0%, #1a2d8a 100%);
+      padding: 2rem 1.5rem 1.75rem;
       position: relative; overflow: hidden;
-      border-bottom: 1px solid var(--border-gold);
     }
     .give-hero::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 80% 20%, rgba(245,200,66,0.1) 0%, transparent 60%);
+      background: radial-gradient(ellipse at 80% 20%, rgba(245,200,66,0.12) 0%, transparent 60%);
+    }
+    .give-hero::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 0; right: 0;
+      height: 20px; background: var(--bg);
+      clip-path: ellipse(55% 100% at 50% 100%);
     }
     .give-title {
       font-family: var(--font-display);
-      font-size: 2rem; font-weight: 600; color: var(--white);
-      position: relative; margin-bottom: 0.5rem;
+      font-size: 2.2rem; font-weight: 600; color: var(--white);
+      margin-bottom: 0.4rem; position: relative;
     }
-    .give-verse { font-size: 0.78rem; color: rgba(255,255,255,0.5); font-style: italic; position: relative; }
+    .give-title em { color: var(--gold-bright); font-style: italic; }
+    .give-verse { font-size: 0.75rem; color: rgba(255,255,255,0.55); font-style: italic; position: relative; }
     .give-options { padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
     .give-option {
       display: flex; align-items: center; gap: 1rem;
-      background: var(--black-3); border: 1px solid var(--border);
-      border-radius: 20px; padding: 1.25rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 1.25rem;
       text-decoration: none; cursor: pointer;
-      transition: border-color 0.2s; -webkit-tap-highlight-color: transparent;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .give-option:active { border-color: var(--border-gold); }
+    .give-option:active { transform: scale(0.98); }
     .give-option-icon {
       width: 48px; height: 48px; border-radius: 14px;
-      background: rgba(245,200,66,0.1); border: 1px solid var(--border-gold);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; flex-shrink: 0;
+      background: var(--gold-bg);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-    .give-option-info { flex: 1; }
-    .give-option-title { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 0.2rem; }
-    .give-option-desc { font-size: 0.72rem; color: var(--gray); }
-    .give-arrow { color: var(--gold); font-size: 1.1rem; }
+    .give-option-title { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+    .give-option-desc { font-size: 0.7rem; color: var(--text-3); }
+    .give-arrow { color: var(--text-3); font-size: 1.2rem; font-weight: 300; }
 
-    /* ── EVENTS PAGE ── */
+    /* ── EVENTS ── */
     .events-list { padding: 0 1.25rem; display: flex; flex-direction: column; gap: 0.6rem; }
     .event-card {
       display: flex; align-items: center; gap: 1rem;
-      background: var(--black-3); border: 1px solid var(--border);
+      background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 16px; padding: 1rem 1.25rem;
-      position: relative; overflow: hidden;
+      box-shadow: var(--shadow); position: relative; overflow: hidden;
     }
     .event-card.special { border-color: var(--border-gold); }
     .event-card.special::before {
       content: '';
       position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-      background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+      background: linear-gradient(180deg, var(--gold), var(--gold-bright));
     }
-    .event-date {
-      display: flex; flex-direction: column; align-items: center;
-      min-width: 44px; text-align: center;
-    }
-    .event-month { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }
-    .event-day { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--white); line-height: 1; }
+    .event-date { display: flex; flex-direction: column; align-items: center; min-width: 44px; }
+    .event-month { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }
+    .event-day { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--navy); line-height: 1; }
     .event-info { flex: 1; min-width: 0; }
-    .event-title { font-size: 0.85rem; font-weight: 600; color: var(--white); margin-bottom: 0.2rem; }
+    .event-title { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
     .event-time { font-size: 0.7rem; color: var(--gold); }
-    .event-location { font-size: 0.68rem; color: var(--gray); margin-top: 0.1rem; }
+    .event-location { font-size: 0.65rem; color: var(--text-3); margin-top: 0.1rem; }
     .event-badge {
-      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em;
+      font-size: 0.56rem; font-weight: 700; letter-spacing: 0.08em;
       text-transform: uppercase; padding: 0.25rem 0.6rem;
       border-radius: 10px; flex-shrink: 0;
-      background: rgba(255,255,255,0.05); color: var(--gray);
+      background: var(--bg-card2); color: var(--text-3);
       border: 1px solid var(--border);
     }
-    .event-badge.special { background: rgba(245,200,66,0.1); color: var(--gold); border-color: var(--border-gold); }
+    .event-badge.special { background: var(--gold-bg); color: var(--gold); border-color: var(--border-gold); }
 
-    /* ── ABOUT PAGE ── */
+    /* ── ABOUT ── */
     .about-hero {
-      background: linear-gradient(160deg, var(--navy) 0%, var(--black) 70%);
-      padding: 2rem 1.25rem 1.75rem;
-      text-align: center;
-      border-bottom: 1px solid var(--border-gold);
+      background: linear-gradient(135deg, var(--navy) 0%, #1a2d8a 100%);
+      padding: 2rem 1.5rem 1.75rem; text-align: center;
       position: relative; overflow: hidden;
     }
     .about-hero::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(245,200,66,0.07) 0%, transparent 60%);
+      background: radial-gradient(ellipse at 50% 0%, rgba(245,200,66,0.1) 0%, transparent 60%);
     }
-    .about-logo { height: 80px; width: auto; margin-bottom: 1rem; position: relative; }
-    .about-name {
-      font-family: var(--font-display);
-      font-size: 1.5rem; font-weight: 600; color: var(--white);
-      margin-bottom: 0.25rem; position: relative;
+    .about-hero::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 0; right: 0;
+      height: 20px; background: var(--bg);
+      clip-path: ellipse(55% 100% at 50% 100%);
     }
-    .about-tagline { font-size: 0.72rem; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; position: relative; }
+    .about-logo { height: 80px; width: auto; margin-bottom: 0.75rem; position: relative; }
+    .about-name { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: white; margin-bottom: 0.25rem; position: relative; }
+    .about-tagline { font-size: 0.65rem; color: rgba(245,200,66,0.8); letter-spacing: 0.12em; text-transform: uppercase; position: relative; }
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; padding: 1.25rem; }
     .info-card {
-      background: var(--black-3); border: 1px solid var(--border);
-      border-radius: 16px; padding: 1rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1rem; box-shadow: var(--shadow);
     }
-    .info-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
-    .info-value { font-size: 0.8rem; color: var(--white); line-height: 1.4; font-weight: 500; }
     .info-card.full { grid-column: 1 / -1; }
+    .info-label { font-size: 0.56rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+    .info-value { font-size: 0.78rem; color: var(--text); line-height: 1.5; font-weight: 500; }
     .leader-card {
       margin: 0 1.25rem;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--black-3) 100%);
-      border: 1px solid var(--border-gold);
-      border-radius: 20px; padding: 1.5rem;
+      background: var(--white); border: 1px solid var(--border-gold);
+      border-radius: 20px; padding: 1.25rem;
       display: flex; align-items: center; gap: 1.25rem;
+      box-shadow: var(--shadow-lg);
       position: relative; overflow: hidden;
     }
     .leader-card::before {
       content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--navy), var(--gold));
     }
     .leader-photo {
-      width: 80px; height: 80px; border-radius: 50%;
+      width: 76px; height: 76px; border-radius: 50%;
       border: 2px solid var(--border-gold);
       object-fit: cover; object-position: top; flex-shrink: 0;
     }
-    .leader-info { flex: 1; }
-    .leader-role { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
-    .leader-name { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
-    .leader-desc { font-size: 0.72rem; color: var(--gray); line-height: 1.5; }
+    .leader-role { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.25rem; }
+    .leader-name { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--navy); margin-bottom: 0.25rem; }
+    .leader-desc { font-size: 0.7rem; color: var(--text-3); line-height: 1.5; }
 
-    /* ── PAGE TITLE ── */
-    .page-title {
-      padding: 1.5rem 1.25rem 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .page-title-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
-    .page-title-text { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; color: var(--white); }
-
-    /* ── YT BUTTON ── */
     .yt-channel-btn {
       display: flex; align-items: center; justify-content: center; gap: 0.6rem;
-      margin: 0 1.25rem;
-      padding: 1rem; border-radius: 16px;
-      background: var(--black-3); border: 1px solid var(--border);
-      color: white; font-size: 0.78rem; font-weight: 600;
-      text-decoration: none; -webkit-tap-highlight-color: transparent;
+      margin: 0 1.25rem; padding: 1rem; border-radius: 16px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text); font-size: 0.78rem; font-weight: 600;
+      text-decoration: none; box-shadow: var(--shadow);
     }
-    .yt-channel-btn:active { border-color: var(--border-gold); }
   </style>
 </head>
 <body>
@@ -501,7 +485,7 @@
   <!-- SCROLL AREA -->
   <div class="scroll-area" id="scroll-area">
 
-    <!-- HOME PAGE -->
+    <!-- HOME -->
     <div class="page active" id="page-home">
       <div class="hero-banner">
         <div class="hero-eyebrow">Welcome to</div>
@@ -512,68 +496,58 @@
           <button class="btn-outline" onclick="navigate('events')">View Services</button>
         </div>
       </div>
-
-      <!-- Quick Actions -->
       <div class="quick-grid">
         <button class="quick-item" onclick="navigate('live')">
-          <div class="quick-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="#FF3B30" stroke-width="1.8" width="22" height="22"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+          <div class="quick-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="1.8" width="22" height="22"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
           <span class="quick-label">Live</span>
         </button>
         <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="quick-item">
-          <div class="quick-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="#F5C842" stroke-width="1.8" width="22" height="22"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <div class="quick-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="#c9930a" stroke-width="1.8" width="22" height="22"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
           <span class="quick-label">Give</span>
         </a>
         <button class="quick-item" onclick="navigate('events')">
-          <div class="quick-icon navy"><svg viewBox="0 0 24 24" fill="none" stroke="#7b93ff" stroke-width="1.8" width="22" height="22"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="quick-icon navy"><svg viewBox="0 0 24 24" fill="none" stroke="#0D1B5E" stroke-width="1.8" width="22" height="22"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
           <span class="quick-label">Events</span>
         </button>
         <button class="quick-item" onclick="navigate('about')">
-          <div class="quick-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="#34C759" stroke-width="1.8" width="22" height="22"><path d="M12 2v20M2 12h20"/></svg></div>
+          <div class="quick-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="#1a7a40" stroke-width="1.8" width="22" height="22"><line x1="12" y1="2" x2="12" y2="22"/><line x1="4" y1="8" x2="20" y2="8"/></svg></div>
           <span class="quick-label">About</span>
         </button>
       </div>
-
-      <!-- Announcement -->
       <div class="announce-card">
-        <div class="announce-tag">Announcement</div>
+        <span class="announce-tag">Announcement</span>
         <div class="announce-title">Saturday Service — Join Us!</div>
         <div class="announce-text">Join us every Saturday from 6:00–8:00 PM for powerful worship and the Word. Intercession begins at 5:00 PM. All are welcome!</div>
       </div>
-
-      <!-- Latest Message -->
       <div class="section">
         <div class="section-header">
           <span class="section-label">Latest Messages</span>
           <div class="section-line"></div>
         </div>
       </div>
-      <div style="padding: 0 1.25rem; padding-bottom: 0.5rem;">
+      <div style="padding: 0 1.25rem 0.5rem;">
         <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="sermon-card">
-          <div class="sermon-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#F5C842" stroke-width="1.6" width="26" height="26"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+          <div class="sermon-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#0D1B5E" stroke-width="1.6" width="26" height="26"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
           <div class="sermon-info">
             <div class="sermon-series">Kingdom Insights</div>
             <div class="sermon-title">Latest Teaching</div>
             <div class="sermon-meta">Apostle Joshua Poro</div>
           </div>
-          <div class="sermon-play">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          </div>
+          <div class="sermon-play"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
         </a>
         <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="sermon-card">
-          <div class="sermon-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#7b93ff" stroke-width="1.6" width="26" height="26"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div class="sermon-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#0D1B5E" stroke-width="1.6" width="26" height="26"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
           <div class="sermon-info">
             <div class="sermon-series">Bible Study</div>
             <div class="sermon-title">Watch on YouTube</div>
             <div class="sermon-meta">@joshuaporo</div>
           </div>
-          <div class="sermon-play">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          </div>
+          <div class="sermon-play"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
         </a>
       </div>
     </div>
 
-    <!-- MESSAGES PAGE -->
+    <!-- MESSAGES -->
     <div class="page" id="page-messages">
       <div class="page-title">
         <div class="page-title-label">Watch & Listen</div>
@@ -581,42 +555,40 @@
       </div>
       <div style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem;">
         <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="sermon-card" style="margin-bottom:0">
-          <div class="sermon-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#F5C842" stroke-width="1.6" width="26" height="26"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+          <div class="sermon-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#0D1B5E" stroke-width="1.6" width="26" height="26"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
           <div class="sermon-info">
             <div class="sermon-series">Kingdom Insights</div>
             <div class="sermon-title">Latest Sermons</div>
             <div class="sermon-meta">Watch on YouTube</div>
           </div>
-          <div class="sermon-play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="sermon-play"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
         </a>
         <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="sermon-card" style="margin-bottom:0">
-          <div class="sermon-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#7b93ff" stroke-width="1.6" width="26" height="26"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div class="sermon-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#0D1B5E" stroke-width="1.6" width="26" height="26"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
           <div class="sermon-info">
             <div class="sermon-series">Bible Study</div>
             <div class="sermon-title">Teaching Series</div>
             <div class="sermon-meta">Watch on YouTube</div>
           </div>
-          <div class="sermon-play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="sermon-play"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
         </a>
         <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="sermon-card" style="margin-bottom:0">
-          <div class="sermon-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#34C759" stroke-width="1.6" width="26" height="26"><line x1="12" y1="2" x2="12" y2="22"/><line x1="4" y1="8" x2="20" y2="8"/></svg></div>
+          <div class="sermon-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#0D1B5E" stroke-width="1.6" width="26" height="26"><line x1="12" y1="2" x2="12" y2="22"/><line x1="4" y1="8" x2="20" y2="8"/></svg></div>
           <div class="sermon-info">
             <div class="sermon-series">Full Archive</div>
             <div class="sermon-title">All Messages</div>
             <div class="sermon-meta">YouTube Channel</div>
           </div>
-          <div class="sermon-play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="sermon-play"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
         </a>
       </div>
-      <div style="padding: 0 1.25rem;">
-        <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="yt-channel-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          Visit YouTube Channel
-        </a>
-      </div>
+      <a href="https://www.youtube.com/@joshuaporo" target="_blank" class="yt-channel-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        Visit YouTube Channel
+      </a>
     </div>
 
-    <!-- LIVE PAGE -->
+    <!-- LIVE -->
     <div class="page" id="page-live">
       <div class="live-status">
         <div class="live-dot"></div>
@@ -625,7 +597,7 @@
       <div class="live-embed">
         <iframe src="https://www.youtube.com/embed/live_stream?channel=UCyour_channel_id" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
       </div>
-      <a href="https://www.youtube.com/@joshuaporo/live" target="_blank" class="live-btn" style="text-decoration:none;">
+      <a href="https://www.youtube.com/@joshuaporo/live" target="_blank" class="live-btn">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
         Open Live on YouTube
       </a>
@@ -633,14 +605,14 @@
         <div class="schedule-header">Service Schedule</div>
         <div class="schedule-row">
           <div class="schedule-day-pill">Saturday</div>
-          <div class="schedule-details">
+          <div>
             <div class="schedule-name">Intercession & Prayer</div>
             <div class="schedule-time">5:00 PM – 6:00 PM · Open to All</div>
           </div>
         </div>
         <div class="schedule-row">
           <div class="schedule-day-pill">Saturday</div>
-          <div class="schedule-details">
+          <div>
             <div class="schedule-name">Saturday Service</div>
             <div class="schedule-time">6:00 PM – 8:00 PM · In Person & Online</div>
           </div>
@@ -648,16 +620,16 @@
       </div>
     </div>
 
-    <!-- GIVE PAGE -->
+    <!-- GIVE -->
     <div class="page" id="page-give">
       <div class="give-hero">
-        <div class="hero-eyebrow">Support the Ministry</div>
-        <div class="give-title">Give to<br><em style="color:var(--gold);font-family:var(--font-display);font-style:italic;">Kingdom</em></div>
+        <div class="hero-eyebrow" style="color:rgba(245,200,66,0.8);">Support the Ministry</div>
+        <div class="give-title">Give to<br><em>Kingdom</em></div>
         <div class="give-verse">"Give, and it will be given to you." — Luke 6:38</div>
       </div>
       <div class="give-options">
         <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="give-option">
-          <div class="give-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#F5C842" stroke-width="1.6" width="26" height="26"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <div class="give-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#c9930a" stroke-width="1.6" width="26" height="26"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
           <div class="give-option-info">
             <div class="give-option-title">Tithe</div>
             <div class="give-option-desc">Honor God with your first fruits</div>
@@ -665,7 +637,7 @@
           <span class="give-arrow">›</span>
         </a>
         <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="give-option">
-          <div class="give-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#F5C842" stroke-width="1.6" width="26" height="26"><line x1="12" y1="2" x2="12" y2="22"/><line x1="4" y1="8" x2="20" y2="8"/></svg></div>
+          <div class="give-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#c9930a" stroke-width="1.6" width="26" height="26"><line x1="12" y1="2" x2="12" y2="22"/><line x1="4" y1="8" x2="20" y2="8"/></svg></div>
           <div class="give-option-info">
             <div class="give-option-title">General Offering</div>
             <div class="give-option-desc">Support the work of the ministry</div>
@@ -673,7 +645,7 @@
           <span class="give-arrow">›</span>
         </a>
         <a href="https://give.tithe.ly/?formId=4a3a9c26-b54a-4b76-bc6d-f187ac5e25af" target="_blank" class="give-option">
-          <div class="give-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#F5C842" stroke-width="1.6" width="26" height="26"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <div class="give-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#c9930a" stroke-width="1.6" width="26" height="26"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
           <div class="give-option-info">
             <div class="give-option-title">Missions & Outreach</div>
             <div class="give-option-desc">Fund the Kingdom beyond our walls</div>
@@ -683,7 +655,7 @@
       </div>
     </div>
 
-    <!-- EVENTS PAGE -->
+    <!-- EVENTS -->
     <div class="page" id="page-events">
       <div class="page-title">
         <div class="page-title-label">2026 Schedule</div>
@@ -1223,14 +1195,13 @@
       </div>
     </div>
 
-    <!-- ABOUT PAGE -->
+    <!-- ABOUT -->
     <div class="page" id="page-about">
       <div class="about-hero">
         <img src="https://storage.googleapis.com/rewebly-c2c2b.firebasestorage.app/projects/j0imv2O2DZSmUWxLFNv2/assets/image_1.png" alt="KIM" class="about-logo" />
         <div class="about-name">Kingdom Insights Ministries</div>
         <div class="about-tagline">Revelation · Awakening · Purpose</div>
       </div>
-
       <div style="padding: 1.25rem 1.25rem 0.5rem;">
         <div class="leader-card">
           <img src="/apostle-joshua-poro.png" alt="Apostle Joshua Poro" class="leader-photo" />
@@ -1241,89 +1212,107 @@
           </div>
         </div>
       </div>
-
       <div class="info-grid">
         <div class="info-card">
-          <div class="info-label">📍 Location</div>
+          <div class="info-label">Location</div>
           <div class="info-value">1418 W Pipeline Rd #145, Hurst, TX 76053</div>
         </div>
         <div class="info-card">
-          <div class="info-label">📞 Phone</div>
-          <div class="info-value"><a href="tel:+14694648295" style="color:inherit;text-decoration:none;">(469) 464-8295</a></div>
+          <div class="info-label">Phone</div>
+          <div class="info-value"><a href="tel:+14694648295" style="color:var(--navy);text-decoration:none;">(469) 464-8295</a></div>
         </div>
         <div class="info-card">
-          <div class="info-label">📧 Email</div>
-          <div class="info-value"><a href="/cdn-cgi/l/email-protection#e78d97889588a78c8e8ac9848f9295848f" style="color:inherit;text-decoration:none;"><span class="__cf_email__" data-cfemail="dfb5afb0adb09fb4b6b2f1bcb7aaadbcb7">[email&#160;protected]</span></a></div>
+          <div class="info-label">Email</div>
+          <div class="info-value"><a href="mailto:jporo@kim.church" style="color:var(--navy);text-decoration:none;">jporo@kim.church</a></div>
         </div>
         <div class="info-card">
-          <div class="info-label">🌐 Website</div>
-          <div class="info-value"><a href="https://kim.church" target="_blank" style="color:var(--gold);text-decoration:none;">kim.church</a></div>
+          <div class="info-label">Website</div>
+          <div class="info-value"><a href="https://kim.church" target="_blank" style="color:var(--navy);text-decoration:none;">kim.church</a></div>
         </div>
         <div class="info-card full">
-          <div class="info-label">📱 Follow Us</div>
-          <div style="display:flex;gap:0.75rem;margin-top:0.5rem;flex-wrap:wrap;">
-            <a href="https://www.youtube.com/@joshuaporo" target="_blank" style="display:flex;align-items:center;gap:0.4rem;text-decoration:none;color:white;font-size:0.75rem;font-weight:600;">
+          <div class="info-label">Follow Us</div>
+          <div style="display:flex;gap:1rem;margin-top:0.6rem;flex-wrap:wrap;">
+            <a href="https://www.youtube.com/@joshuaporo" target="_blank" style="display:flex;align-items:center;gap:0.4rem;text-decoration:none;color:var(--text);font-size:0.75rem;font-weight:600;">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YouTube
             </a>
-            <a href="https://www.facebook.com/JoshuaPoroII" target="_blank" style="display:flex;align-items:center;gap:0.4rem;text-decoration:none;color:white;font-size:0.75rem;font-weight:600;">
+            <a href="https://www.facebook.com/JoshuaPoroII" target="_blank" style="display:flex;align-items:center;gap:0.4rem;text-decoration:none;color:var(--text);font-size:0.75rem;font-weight:600;">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook
             </a>
-            <a href="https://www.tiktok.com/@porojosh" target="_blank" style="display:flex;align-items:center;gap:0.4rem;text-decoration:none;color:white;font-size:0.75rem;font-weight:600;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>TikTok
+            <a href="https://www.tiktok.com/@porojosh" target="_blank" style="display:flex;align-items:center;gap:0.4rem;text-decoration:none;color:var(--text);font-size:0.75rem;font-weight:600;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="black"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>TikTok
             </a>
           </div>
         </div>
       </div>
     </div>
 
-  </div><!-- end scroll-area -->
+  </div>
 
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="navigate('home')" id="nav-home">
+      <div class="nav-indicator"></div>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span class="nav-label">Home</span>
-      <div class="nav-dot"></div>
     </button>
     <button class="nav-item" onclick="navigate('messages')" id="nav-messages">
+      <div class="nav-indicator"></div>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
       <span class="nav-label">Messages</span>
-      <div class="nav-dot"></div>
     </button>
     <button class="nav-item" onclick="navigate('live')" id="nav-live">
+      <div class="nav-indicator"></div>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
       <span class="nav-label">Live</span>
-      <div class="nav-dot"></div>
     </button>
     <button class="nav-item" onclick="navigate('give')" id="nav-give">
+      <div class="nav-indicator"></div>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       <span class="nav-label">Give</span>
-      <div class="nav-dot"></div>
     </button>
     <button class="nav-item" onclick="navigate('events')" id="nav-events">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <div class="nav-indicator"></div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       <span class="nav-label">Events</span>
-      <div class="nav-dot"></div>
     </button>
     <button class="nav-item" onclick="navigate('about')" id="nav-about">
+      <div class="nav-indicator"></div>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span class="nav-label">About</span>
-      <div class="nav-dot"></div>
     </button>
   </nav>
 
-</div><!-- end app -->
+</div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  const pages = ['home','messages','live','give','events','about'];
-  const titles = { home:'Home', messages:'Messages', live:'Live Stream', give:'Give', events:'Services & Events', about:'About Us' };
+<script>
+  var pages = ['home','messages','live','give','events','about'];
+  var titles = { home:'Home', messages:'Messages', live:'Live Stream', give:'Give', events:'Services & Events', about:'About Us' };
 
   function navigate(page) {
-    pages.forEach(p => {
-      document.getElementById('page-' + p)?.classList.remove('active');
-      document.getElementById('nav-' + p)?.classList.remove('active');
+    pages.forEach(function(p) {
+      var pg = document.getElementById('page-' + p);
+      var nv = document.getElementById('nav-' + p);
+      if (pg) pg.classList.remove('active');
+      if (nv) nv.classList.remove('active');
     });
-    document.getElementById('page-' + page)?.classList.add('active');
-    document.getElementById('nav-' + page)?.classList.add('active');
+    var activePage = document.getElementById('page-' + page);
+    var activeNav = document.getElementById('nav-' + page);
+    if (activePage) activePage.classList.add('active');
+    if (activeNav) activeNav.classList.add('active');
     document.getElementById('topbar-title').textContent = titles[page] || '';
-    document.g
+    document.getElementById('scroll-area').scrollTop = 0;
+  }
+
+  function dismissSplash() {
+    var splash = document.getElementById('splash');
+    if (splash) {
+      splash.classList.add('hidden');
+      setTimeout(function() { splash.style.display = 'none'; }, 500);
+    }
+  }
+
+  setTimeout(dismissSplash, 2000);
+  document.getElementById('splash').addEventListener('click', dismissSplash);
+</script>
+</body>
+</html>
