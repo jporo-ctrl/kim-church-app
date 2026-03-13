@@ -1284,7 +1284,7 @@
 
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   var pages = ['home','messages','live','give','events','about'];
   var titles = { home:'Home', messages:'Messages', live:'Live Stream', give:'Give', events:'Services & Events', about:'About Us' };
 
@@ -1306,4 +1306,13 @@
   function dismissSplash() {
     var splash = document.getElementById('splash');
     if (splash) {
-      splash.classLis
+      splash.classList.add('hidden');
+      setTimeout(function() { splash.style.display = 'none'; }, 500);
+    }
+  }
+
+  setTimeout(dismissSplash, 2000);
+  document.getElementById('splash').addEventListener('click', dismissSplash);
+</script>
+</body>
+</html>
